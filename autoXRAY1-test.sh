@@ -535,19 +535,7 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
     {
       "tag": "block",
       "protocol": "blackhole"
-    },
-	{
-	  "tag": "warp",
-	  "protocol": "socks",
-	  "settings": {
-		"servers": [
-		  {
-			"address": "127.0.0.1",
-			"port": 40000
-		  }
-		]
-	  }
-	}
+    }
   ],
   "routing": {
     "rules": [
@@ -574,11 +562,7 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
           "geosite:private"
         ],
         "outboundTag": "block"
-      },
-	{
-	  "outboundTag": "warp",
-	  "domain": ["ifconfig.me","checkip.amazonaws.com","pify.org","2ip.io","habr.com","geosite:category-ip-geo-detect","geosite:google-gemini","geosite:canva","geosite:openai","geosite:whatsapp"]
-	}
+      }
     ],
     "domainStrategy": "IPIfNonMatch"
   }
