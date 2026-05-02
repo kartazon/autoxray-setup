@@ -88,7 +88,7 @@ elif [ -f /etc/nginx/conf.d/default.conf ]; then
     mkdir -p /var/www/html
 
     tmp_certbot_nginx="$(mktemp)"
-    curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/nginx-certbot.conf.tpl" -o "$tmp_certbot_nginx"
+    curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/nginx-certbot.conf" -o "$tmp_certbot_nginx"
     install -m 0644 "$tmp_certbot_nginx" "$CONFIG_PATH"
     rm -f "$tmp_certbot_nginx"
 
