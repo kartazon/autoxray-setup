@@ -49,7 +49,7 @@ else
 fi
 
 tmp_limits="$(mktemp)"
-curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/limits.conf" -o "$tmp_limits"
+curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray-setup/main/limits.conf" -o "$tmp_limits"
 install -m 0644 "$tmp_limits" /etc/security/limits.d/99-autoxray.conf
 rm -f "$tmp_limits"
 
@@ -60,7 +60,7 @@ echo -e "${GRN}Лимиты PAM применены. Текущий ulimit -n: $(
 mkdir -p /etc/systemd/system/xray.service.d/
 
 tmp_xray_limits="$(mktemp)"
-curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/limits-xray.conf" -o "$tmp_xray_limits"
+curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray-setup/main/limits-xray.conf" -o "$tmp_xray_limits"
 install -m 0644 "$tmp_xray_limits" /etc/systemd/system/xray.service.d/limits.conf
 rm -f "$tmp_xray_limits"
 
