@@ -49,16 +49,24 @@ else
     echo -e "${GRN}BBR активирован${NC}"
 fi
 
+tmp_limits="$(mktemp)"
+curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/limits.conf" -o "$tmp_limits"
+install -m 0644 "$tmp_limits" /etc/security/limits.d/99-autoxray.conf
+rm -f "$tmp_limits"
 
-cat <<EOF > /etc/security/limits.d/99-autoXRAY.conf
-*       soft    nofile  1048576
-*       hard    nofile  1048576
-root    soft    nofile  1048576
-root    hard    nofile  1048576
-EOF
 ulimit -n 65535
-echo -e "${GRN}Лимиты применены. Текущий ulimit -n: $(ulimit -n) ${NC}"
+echo -e "${GRN}Лимиты PAM применены. Текущий ulimit -n: $(ulimit -n) ${NC}"
 
+# systemd override для xray
+mkdir -p /etc/systemd/system/xray.service.d/
+
+tmp_xray_limits="$(mktemp)"
+curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/limits-xray.conf" -o "$tmp_xray_limits"
+install -m 0644 "$tmp_xray_limits" /etc/systemd/system/xray.service.d/limits.conf
+rm -f "$tmp_xray_limits"
+
+systemctl daemon-reload
+echo -e "${GRN}systemd override для xray установлен.${NC}"
 
 # Создание директории сайта
 WEB_PATH="/var/www/$DOMAIN"
