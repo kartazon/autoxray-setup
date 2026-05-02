@@ -42,8 +42,8 @@ bbr=$(sysctl -a | grep net.ipv4.tcp_congestion_control)
 if [ "$bbr" = "net.ipv4.tcp_congestion_control = bbr" ]; then
     echo -e "${GRN}BBR уже запущен${NC}"
 else
-    echo "net.core.default_qdisc=fq" > /etc/sysctl.d/999-autoXRAY.conf
-    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.d/999-autoXRAY.conf
+    echo "net.core.default_qdisc=fq" > /etc/sysctl.d/999-autoxray.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.d/999-autoxray.conf
     sysctl --system
     echo -e "${GRN}BBR активирован${NC}"
 fi
