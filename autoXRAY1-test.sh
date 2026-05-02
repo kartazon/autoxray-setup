@@ -787,10 +787,6 @@ OUT_REALITY_XHTTP='{
   }
 }'
 
-
-
-
-
 # --- Config 3
 OUT_VISION='{
   "tag": "proxy",
