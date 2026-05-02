@@ -654,23 +654,6 @@ print_config() {
       }
     },
     {
-      "tag": "socks-sb",
-      "protocol": "socks",
-      "listen": "127.0.0.1",
-      "port": 2080,
-      "settings": {
-        "udp": true
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": [
-          "http",
-          "tls",
-          "quic"
-        ]
-      }
-    },
-    {
       "tag": "http-in",
       "protocol": "http",
       "listen": "127.0.0.1",
