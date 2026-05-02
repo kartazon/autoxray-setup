@@ -243,13 +243,6 @@ socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 16)
 
 
 # Установка WARP-cli
-# Посмотреть порт(2408): grep -r "Endpoint" /etc/wireguard/
-if ss -tuln | grep -q ":40000 "; then
-    echo -e "${GRN}WARP-cli (Socks5 на порту 40000) уже работает. Пропускаем.${NC}"
-else
-    echo -e "${GRN}Установка WARP-cli (автоматически)...${NC}"
-    echo -e "1\n1\n40000" | bash <(curl -fsSL https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh) w
-fi
 
 # Экспортируем переменные для envsubst
 export xray_uuid_vrv xray_privateKey_vrv xray_publicKey_vrv xray_shortIds_vrv xray_sspasw_vrv DOMAIN path_subpage path_xhttp WEB_PATH socksUser socksPasw
@@ -1015,13 +1008,6 @@ EOF
 echo -e "\n${YEL}=== Финальная проверка статусов ===${NC}"
 
 # Проверка WARP-cli (Socks5 порт 40000)
-if ss -nlt | grep -q ":40000\b"; then
-    echo -e "WARP-cli: ${GRN}LISTENING${NC}"
-else
-    echo -e "WARP-cli: ${RED}NOT LISTENING${NC}"
-    echo "Возникла ошибка! Возможные пути решения проблемы смотрите здесь:"
-    echo "https://github.com/xVRVx/autoXRAY/blob/main/test/warp-readme.md"
-fi
 
 # Проверка Telemt
 if systemctl is-active --quiet telemt; then echo -e "Telemt: ${GRN}RUNNING${NC}"; else echo -e "Telemt: ${RED}STOPPED/ERROR${NC}"; fi
