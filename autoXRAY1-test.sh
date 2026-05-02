@@ -78,38 +78,30 @@ bash -c "$(curl -L https://github.com/xVRVx/autoXRAY/raw/refs/heads/main/test/ge
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 
 # Блок CERTBOT - START
-
 # Определяем путь к конфигу nginx
 if [ -f /etc/nginx/sites-available/default ]; then
     CONFIG_PATH="/etc/nginx/sites-available/default"
 	echo -e "${GRN}Обнаружена стандартная сборка nginx. ${NC}"
 elif [ -f /etc/nginx/conf.d/default.conf ]; then
     CONFIG_PATH="/etc/nginx/conf.d/default.conf"
-	echo -e "${YEL}Обнаружена нестандартная сборка nginx. Предварительная настройка NGINX для CERTBOT ${NC}"
-	mkdir -p /var/www/html
+    echo -e "${YEL}Обнаружена нестандартная сборка nginx. Предварительная настройка NGINX для CERTBOT ${NC}"
+    mkdir -p /var/www/html
 
-# Записываем временный конфиг
-cat <<EOF > "$CONFIG_PATH"
-server {
-	listen 80 default_server;
-	server_name _;
+    tmp_certbot_nginx="$(mktemp)"
+    curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/nginx-certbot.conf.tpl" -o "$tmp_certbot_nginx"
+    install -m 0644 "$tmp_certbot_nginx" "$CONFIG_PATH"
+    rm -f "$tmp_certbot_nginx"
 
-	location /.well-known/acme-challenge/ {
-		root /var/www/html;
-		allow all;
-	}
-
-	location / {
-		return 301 https://\$host\$request_uri;
-	}
-}
-EOF
-	systemctl reload nginx
+    if nginx -t; then
+        systemctl reload nginx
+    else
+        echo -e "${RED}❌ Ошибка во временной конфигурации nginx для certbot ${NC}"
+        exit 1
+    fi
 else
     echo -e "${RED}Не найден ни один default конфиг nginx${NC}"
     exit 1
 fi
-
 
 mkdir -p /var/lib/xray/cert/
 
