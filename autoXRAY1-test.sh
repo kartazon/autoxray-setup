@@ -37,7 +37,6 @@ if [ "$LOCAL_IP" != "$DNS_IP" ]; then
     echo -e "${YEL}Продолжение выполнения скрипта...${NC}"
 fi
 
-
 # Включаем BBR
 bbr=$(sysctl -a | grep net.ipv4.tcp_congestion_control)
 if [ "$bbr" = "net.ipv4.tcp_congestion_control = bbr" ]; then
