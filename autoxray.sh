@@ -550,7 +550,6 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
       },
       {
         "domain": [
-          "geosite:category-ads",
           "geosite:win-spy",
           "geosite:private"
         ],
@@ -586,7 +585,6 @@ print_config() {
     "rules": [
       {
         "domain": [
-          "geosite:category-ads",
           "geosite:win-spy"
         ],
         "outboundTag": "block"
@@ -608,12 +606,9 @@ print_config() {
           "geosite:private",
           "ifconfig.me",
           "checkip.amazonaws.com",
-          "pify.org",
           "geosite:category-ip-geo-detect",
           "geosite:apple",
           "geosite:apple-pki",
-          "geosite:huawei",
-          "geosite:xiaomi",
           "geosite:category-android-app-download",
           "geosite:f-droid",
           "geosite:yandex",
@@ -623,7 +618,6 @@ print_config() {
           "geosite:win-extra",
           "geosite:google-play",
           "geosite:steam",
-          "geosite:category-ru"
         ],
         "outboundTag": "direct"
       },
