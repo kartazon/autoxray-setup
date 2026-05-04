@@ -113,6 +113,7 @@ mkdir -p /var/lib/xray/cert/
 #chmod 744 /var/lib/xray/cert/privkey.pem
 #chmod 744 /var/lib/xray/cert/fullchain.pem
 
+set +e
 certbot certonly --webroot -w /var/www/html \
   -d $DOMAIN \
   -m mail@$DOMAIN \
@@ -120,6 +121,7 @@ certbot certonly --webroot -w /var/www/html \
   --deploy-hook "systemctl reload nginx; cp /etc/letsencrypt/live/$DOMAIN/fullchain.pem /var/lib/xray/cert/fullchain.pem; cp /etc/letsencrypt/live/$DOMAIN/privkey.pem /var/lib/xray/cert/privkey.pem; chmod 744 /var/lib/xray/cert/privkey.pem; chmod 744 /var/lib/xray/cert/fullchain.pem; systemctl restart xray"
 
 RET=$?
+set -e
 
 if [ $RET -eq 0 ]; then
   echo -e "\n${GRN}========================================"
