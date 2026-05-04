@@ -528,7 +528,7 @@ print_config() {
           "geosite:win-update",
           "geosite:win-extra",
           "geosite:google-play",
-          "geosite:steam",
+          "geosite:steam"
         ],
         "outboundTag": "direct"
       },
