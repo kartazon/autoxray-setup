@@ -212,9 +212,9 @@ key_output=$(xray x25519)
 xray_privateKey_vrv=$(echo "$key_output" | awk -F': ' '/PrivateKey/ {print $2}')
 xray_publicKey_vrv=$(echo "$key_output" | awk -F': ' '/Password/ {print $2}')
 
-key_mldsa65=$(xray mldsa65)
-seed_mldsa65=$(echo "$key_mldsa65" | awk -F': ' '/Seed/ {print $2}')
-verify_mldsa65=$(echo "$key_mldsa65" | awk -F': ' '/Verify/ {print $2}')
+#key_mldsa65=$(xray mldsa65)
+#seed_mldsa65=$(echo "$key_mldsa65" | awk -F': ' '/Seed/ {print $2}')
+#verify_mldsa65=$(echo "$key_mldsa65" | awk -F': ' '/Verify/ {print $2}')
 
 xray_shortIds_vrv=$(openssl rand -hex 8)
 
