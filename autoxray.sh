@@ -2,18 +2,18 @@
 trap 'echo "FAILED line=$LINENO cmd=$BASH_COMMAND exit=$?"' ERR
 set -euo pipefail
 
+# Цвета для вывода
+GRN='\033[1;32m'
+RED='\033[1;31m'
+YEL='\033[1;33m'
+NC='\033[0m' # No Color
+
 # log файл
 LOG_FILE="/var/log/autoxray-install.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 log() { echo -e "${GRN}[INFO]${NC} $*"; }
 warn() { echo -e "${YEL}[WARN]${NC} $*"; }
 err() { echo -e "${RED}[ERR]${NC} $*"; }
-
-# Цвета для вывода
-GRN='\033[1;32m'
-RED='\033[1;31m'
-YEL='\033[1;33m'
-NC='\033[0m' # No Color
 
 echo -e "${GRN}Версия: 222 ${NC}"
 
@@ -83,7 +83,7 @@ mkdir -p "$WEB_PATH"
 bash -c "$(curl --connect-timeout 10 --max-time 30 -fsSL https://github.com/xVRVx/autoXRAY/raw/refs/heads/main/test/gen_page2.sh)" -- $WEB_PATH
 
 # Установка Xray
-bash -c "$(ccurl --connect-timeout 10 --max-time 30 -fsSL https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+bash -c "$(curl --connect-timeout 10 --max-time 30 -fsSL https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 
 # Блок CERTBOT - START
 # Определяем путь к конфигу nginx
@@ -152,6 +152,9 @@ fi
 path_xhttp=$(openssl rand -base64 15 | tr -dc 'a-z0-9' | head -c 6) || true
 
 path_subpage=$(openssl rand -base64 15 | tr -dc 'A-Za-z0-9' | head -c 20) || true
+
+[ -n "$path_xhttp" ] || { echo "path_xhttp пустой"; exit 1; }
+[ -n "$path_subpage" ] || { echo "path_subpage пустой"; exit 1; }
 
 bash -c "cat > $CONFIG_PATH" <<EOF
 server {
@@ -240,6 +243,8 @@ xray_sspasw_vrv=$(openssl rand -base64 32)
 #socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 16)
 socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 12) || true
 socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 24) || true
+[ -n "$socksUser" ] || { echo "socksUser пустой"; exit 1; }
+[ -n "$socksPasw" ] || { echo "socksPasw пустой"; exit 1; }
 
 # Экспортируем переменные для envsubst
 export xray_uuid_vrv xray_privateKey_vrv xray_publicKey_vrv xray_shortIds_vrv xray_sspasw_vrv DOMAIN path_subpage path_xhttp WEB_PATH socksUser socksPasw
