@@ -2,6 +2,13 @@
 trap 'echo "FAILED line=$LINENO cmd=$BASH_COMMAND exit=$?"' ERR
 set -euo pipefail
 
+# log файл
+LOG_FILE="/var/log/autoxray-install.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+log() { echo -e "${GRN}[INFO]${NC} $*"; }
+warn() { echo -e "${YEL}[WARN]${NC} $*"; }
+err() { echo -e "${RED}[ERR]${NC} $*"; }
+
 # Цвета для вывода
 GRN='\033[1;32m'
 RED='\033[1;31m'
@@ -39,8 +46,8 @@ if [ "$LOCAL_IP" != "$DNS_IP" ]; then
 fi
 
 # Включаем BBR
-bbr=$(sysctl -a | grep net.ipv4.tcp_congestion_control)
-if [ "$bbr" = "net.ipv4.tcp_congestion_control = bbr" ]; then
+bbr=$(sysctl -n net.ipv4.tcp_congestion_control 2>/dev/null || true)
+if [ "$bbr" = "bbr" ]; then
     echo -e "${GRN}BBR уже запущен${NC}"
 else
     echo "net.core.default_qdisc=fq" > /etc/sysctl.d/999-autoxray.conf
@@ -73,10 +80,10 @@ WEB_PATH="/var/www/$DOMAIN"
 mkdir -p "$WEB_PATH"
 
 # Генерируем сайт маскировку
-bash -c "$(curl -L https://github.com/xVRVx/autoXRAY/raw/refs/heads/main/test/gen_page2.sh)" -- $WEB_PATH
+bash -c "$(curl --connect-timeout 10 --max-time 30 -fsSL https://github.com/xVRVx/autoXRAY/raw/refs/heads/main/test/gen_page2.sh)" -- $WEB_PATH
 
 # Установка Xray
-bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+bash -c "$(ccurl --connect-timeout 10 --max-time 30 -fsSL https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 
 # Блок CERTBOT - START
 # Определяем путь к конфигу nginx
@@ -89,7 +96,7 @@ elif [ -f /etc/nginx/conf.d/default.conf ]; then
     mkdir -p /var/www/html
 
     tmp_certbot_nginx="$(mktemp)"
-    curl -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/nginx-certbot.conf" -o "$tmp_certbot_nginx"
+    curl --connect-timeout 10 --max-time 30 -fsSL "https://raw.githubusercontent.com/kartazon/autoxray/main/test/nginx-certbot.conf" -o "$tmp_certbot_nginx"
     install -m 0644 "$tmp_certbot_nginx" "$CONFIG_PATH"
     rm -f "$tmp_certbot_nginx"
 
@@ -200,8 +207,16 @@ server {
 }
 EOF
 
-systemctl restart nginx
-echo -e "${GRN}✅ Конфигурация nginx обновлена.${NC}"
+if nginx -t; then
+    systemctl reload nginx
+    echo -e "${GRN}✅ Конфигурация nginx обновлена. ${NC}"
+else
+    echo -e "${RED}❌ Ошибка в конфигурации nginx. ${NC}"
+    exit 1
+fi
+
+#systemctl restart nginx
+#echo -e "${GRN}✅ Конфигурация nginx обновлена.${NC}"
 
 
 SCRIPT_DIR=/usr/local/etc/xray
@@ -727,6 +742,7 @@ OUT_XHTTP='{
   echo "]"
 ) | envsubst > "$WEB_PATH/$path_subpage.json"
 
+xray run -test -config /usr/local/etc/xray/config.json
 systemctl restart xray
 echo -e "Перезапуск XRAY"
 
@@ -754,7 +770,7 @@ CONFIGS_ARRAY=(
 ALL_LINKS_TEXT=""
 
 echo -e "\n\n${GRN}Устанавливаем MTProto FakeTLS ${NC}"
-source <(curl -fsSL https://raw.githubusercontent.com/kartazon/autoxray-setup/main/telemt-test.sh)
+source <(curl --connect-timeout 10 --max-time 30 -fsSL https://raw.githubusercontent.com/kartazon/autoxray-setup/main/telemt-test.sh)
 
 # --- ЗАПИСЬ HEAD (СТАТИКА, МИНИФИЦИРОВАННЫЕ СТИЛИ И JS) ---
 cat > "$WEB_PATH/$path_subpage.html" <<'EOF'
