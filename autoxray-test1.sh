@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Цвета для вывода
 GRN='\033[1;32m'
