@@ -55,7 +55,7 @@ curl --connect-timeout 10 --max-time 30 -fsSL "https://raw.githubusercontent.com
 install -m 0644 "$tmp_limits" /etc/security/limits.d/99-autoxray.conf
 rm -f "$tmp_limits"
 
-ulimit -n 65535
+ulimit -n 65535 || echo -e "${YEL}ulimit -n не удалось применить в текущей сессии, PAM limits применятся при следующем входе.${NC}"
 echo -e "${GRN}Лимиты PAM применены. Текущий ulimit -n: $(ulimit -n) ${NC}"
 
 # systemd override для xray
