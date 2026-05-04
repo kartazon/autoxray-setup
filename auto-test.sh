@@ -24,7 +24,7 @@ apt-get update && apt-get install curl jq dnsutils openssl nginx certbot wget ta
 systemctl enable --now nginx
 
 LOCAL_IP=$(hostname -I | awk '{print $1}')
-DNS_IP=$(dig +short "$DOMAIN" | grep '^[0-9]')
+DNS_IP=$(dig +short "$DOMAIN" | grep -m1 '^[0-9]' || true)
 
 if [ "$LOCAL_IP" != "$DNS_IP" ]; then
     echo -e "${RED}❌ Внимание: IP-адрес ($LOCAL_IP) не совпадает с A-записью $DOMAIN ($DNS_IP).${NC}"
