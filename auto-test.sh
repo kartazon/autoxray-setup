@@ -1,5 +1,5 @@
 #!/bin/bash
-trap 'echo "SCRIPT FAILED AT LINE $LINENO"' ERR
+trap 'echo "FAILED line=$LINENO cmd=$BASH_COMMAND exit=$?"' ERR
 set -euo pipefail
 
 # Цвета для вывода
@@ -12,15 +12,14 @@ echo -e "${GRN}Версия: 222 ${NC}"
 
 [[ $EUID -eq 0 ]] || { echo -e "${RED}❌ скрипту нужны root права ${NC}"; exit 1; }
 
-DOMAIN=$1
-
+DOMAIN="${1:-}"
 if [ -z "$DOMAIN" ]; then
     echo -e "${RED}❌ Ошибка: домен не задан.${NC}"
     exit 1
 fi
 
 echo -e "${YEL}Обновление и установка необходимых пакетов...${NC}"
-apt-get update && apt-get install curl jq dnsutils openssl nginx certbot wget tar -y
+apt-get update && apt-get install curl jq dnsutils openssl nginx certbot wget tar gettext-base -y
 systemctl enable --now nginx
 
 LOCAL_IP=$(hostname -I | awk '{print $1}')
