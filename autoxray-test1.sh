@@ -216,16 +216,10 @@ verify_mldsa65=$(echo "$key_mldsa65" | awk -F': ' '/Verify/ {print $2}')
 
 xray_shortIds_vrv=$(openssl rand -hex 8)
 
-# xray_sspasw_vrv=$(openssl rand -base64 15 | tr -dc 'A-Za-z0-9' | head -c 20)
 xray_sspasw_vrv=$(openssl rand -base64 32)
-
-# ipserv=$(hostname -I | awk '{print $1}')
 
 socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 6)
 socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 16)
-
-
-# Установка WARP-cli
 
 # Экспортируем переменные для envsubst
 export xray_uuid_vrv xray_privateKey_vrv xray_publicKey_vrv xray_shortIds_vrv xray_sspasw_vrv DOMAIN path_subpage path_xhttp WEB_PATH socksUser socksPasw
@@ -849,8 +843,6 @@ EOF
 
 # --- ФИНАЛЬНАЯ ПРОВЕРКА ---
 echo -e "\n${YEL}=== Финальная проверка статусов ===${NC}"
-
-# Проверка WARP-cli (Socks5 порт 40000)
 
 # Проверка Telemt
 if systemctl is-active --quiet telemt; then echo -e "Telemt: ${GRN}RUNNING${NC}"; else echo -e "Telemt: ${RED}STOPPED/ERROR${NC}"; fi
