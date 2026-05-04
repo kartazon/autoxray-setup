@@ -346,10 +346,6 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
         "decryption": "none",
         "fallbacks": [
           {
-            "path": "/ssws",
-            "dest": "4001"
-          },
-          {
 		    "alpn": "h2",
             "dest": "/dev/shm/nginx_h2.sock",
             "xver": 2
