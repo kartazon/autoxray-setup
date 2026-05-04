@@ -66,7 +66,7 @@ curl --connect-timeout 10 --max-time 30 -fsSL "https://raw.githubusercontent.com
 install -m 0644 "$tmp_xray_limits" /etc/systemd/system/xray.service.d/limits.conf
 rm -f "$tmp_xray_limits"
 
-systemctl daemon-reload
+systemctl daemon-reload || true
 echo -e "${GRN}systemd override для xray установлен.${NC}"
 
 # Создание директории сайта
