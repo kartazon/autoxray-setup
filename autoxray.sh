@@ -150,7 +150,6 @@ fi
 # конфиг nginx
 
 path_xhttp=$(openssl rand -base64 15 | tr -dc 'a-z0-9' | head -c 6) || true
-
 path_subpage=$(openssl rand -base64 15 | tr -dc 'A-Za-z0-9' | head -c 20) || true
 
 [ -n "$path_xhttp" ] || { echo "path_xhttp пустой"; exit 1; }
