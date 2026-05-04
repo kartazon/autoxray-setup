@@ -281,7 +281,7 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
         "realitySettings": {
           "show": false,
           "xver": 2,
-          "target": "127.0.0.1:500",
+          "target": "addons.mozilla.org:443",
           "spiderX": "/",
           "shortIds": [
             "${xray_shortIds_vrv}"
