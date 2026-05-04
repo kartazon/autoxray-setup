@@ -141,9 +141,9 @@ fi
 
 # конфиг nginx
 
-path_xhttp=$(openssl rand -base64 15 | tr -dc 'a-z0-9' | head -c 6)
+path_xhttp=$(openssl rand -base64 15 | tr -dc 'a-z0-9' | head -c 6 || true)
 
-path_subpage=$(openssl rand -base64 15 | tr -dc 'A-Za-z0-9' | head -c 20)
+path_subpage=$(openssl rand -base64 15 | tr -dc 'A-Za-z0-9' | head -c 20 || true)
 
 bash -c "cat > $CONFIG_PATH" <<EOF
 server {
@@ -222,8 +222,8 @@ xray_sspasw_vrv=$(openssl rand -base64 32)
 
 #socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 6)
 #socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 16)
-socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 12)
-socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 24)
+socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 12 || true)
+socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 24 || true)
 
 # Экспортируем переменные для envsubst
 export xray_uuid_vrv xray_privateKey_vrv xray_publicKey_vrv xray_shortIds_vrv xray_sspasw_vrv DOMAIN path_subpage path_xhttp WEB_PATH socksUser socksPasw
