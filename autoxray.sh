@@ -211,16 +211,19 @@ server {
 EOF
 
 if nginx -t; then
-    systemctl reload nginx
-    echo -e "${GRN}✅ Конфигурация nginx обновлена. ${NC}"
+    if systemctl reload nginx; then
+        echo -e "${GRN}✅ Конфигурация nginx обновлена.${NC}"
+    else
+        echo -e "${RED}❌ nginx -t прошёл, но reload nginx завершился с ошибкой.${NC}"
+        exit 1
+    fi
 else
-    echo -e "${RED}❌ Ошибка в конфигурации nginx. ${NC}"
+    echo -e "${RED}❌ Ошибка в конфигурации nginx.${NC}"
     exit 1
 fi
 
 #systemctl restart nginx
 #echo -e "${GRN}✅ Конфигурация nginx обновлена.${NC}"
-
 
 SCRIPT_DIR=/usr/local/etc/xray
 
@@ -747,9 +750,21 @@ OUT_XHTTP='{
   echo "]"
 ) | envsubst > "$WEB_PATH/$path_subpage.json"
 
-xray run -test -config /usr/local/etc/xray/config.json
-systemctl restart xray
-echo -e "Перезапуск XRAY"
+XRAY_CONFIG="$SCRIPT_DIR/config.json"
+
+if xray run -test -config "$XRAY_CONFIG"; then
+    echo -e "${GRN}✅ Конфигурация Xray корректна.${NC}"
+
+    if systemctl restart xray; then
+        echo -e "${GRN}✅ Xray успешно перезапущен.${NC}"
+    else
+        echo -e "${RED}❌ Конфиг Xray валиден, но systemctl restart xray завершился ошибкой.${NC}"
+        exit 1
+    fi
+else
+    echo -e "${RED}❌ Ошибка в конфигурации Xray: $XRAY_CONFIG ${NC}"
+    exit 1
+fi
 
 # Формирование ссылок
 subPageLink="https://$DOMAIN/$path_subpage.json"
