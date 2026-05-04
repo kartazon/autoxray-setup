@@ -1,6 +1,6 @@
 echo -e "${GRN}Версия телемт: 222 ${NC}"
 
-systemctl stop telemt 2>/dev/null
+systemctl stop telemt 2>/dev/null || true
 
 wget -qO- "https://github.com/telemt/telemt/releases/latest/download/telemt-$(uname -m)-linux-$(ldd --version 2>&1 | grep -iq musl && echo musl || echo gnu).tar.gz" | tar -xz
 mv telemt /bin
@@ -65,8 +65,10 @@ weight = 10
 enabled = true
 EOF
 
-useradd -d /opt/telemt -m -r -U telemt
-chown -R telemt:telemt /etc/telemt
+if ! id -u telemt >/dev/null 2>&1; then
+    useradd -d /opt/telemt -m -r -U telemt
+fi
+chown -R telemt:telemt /opt/telemt /etc/telemt
 
 cat <<EOF > "/etc/systemd/system/telemt.service"
 [Unit]
@@ -90,10 +92,10 @@ NoNewPrivileges=true
 WantedBy=multi-user.target
 EOF
 
-systemctl daemon-reload
+systemctl daemon-reload || true
 sleep 1
-systemctl start telemt
-systemctl enable telemt
+systemctl restart telemt || systemctl start telemt
+systemctl enable telemt || true
 
 sleep 3
 telemtSecret=$(curl -s http://127.0.0.1:9091/v1/users | jq -r '.data[0].links.tls[0] | split("secret=")[1]')
