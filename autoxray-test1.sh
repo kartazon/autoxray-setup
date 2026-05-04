@@ -219,8 +219,10 @@ xray_shortIds_vrv=$(openssl rand -hex 8)
 
 xray_sspasw_vrv=$(openssl rand -base64 32)
 
-socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 6)
-socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 16)
+#socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 6)
+#socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 16)
+socksUser=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 12)
+socksPasw=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 24)
 
 # Экспортируем переменные для envsubst
 export xray_uuid_vrv xray_privateKey_vrv xray_publicKey_vrv xray_shortIds_vrv xray_sspasw_vrv DOMAIN path_subpage path_xhttp WEB_PATH socksUser socksPasw
