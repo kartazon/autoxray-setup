@@ -82,11 +82,9 @@ WEB_PATH="/var/www/$DOMAIN"
 if [ -d "$WEB_PATH" ]; then
     echo -e "${YEL}Найден старый каталог сайта: $WEB_PATH — очищаем...${NC}"
     find "$WEB_PATH" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-	rm -f "$WEB_PATH"/*.json "$WEB_PATH"/*.txt "$WEB_PATH"/*.yaml "$WEB_PATH"/*.yml "$WEB_PATH"/*.html "$WEB_PATH"/*.php 2>/dev/null || true
 else
     mkdir -p "$WEB_PATH"
 fi
-mkdir -p "$WEB_PATH"
 
 # Генерируем сайт маскировку
 bash -c "$(curl --connect-timeout 10 --max-time 30 -fsSL https://github.com/xVRVx/autoXRAY/raw/refs/heads/main/test/gen_page2.sh)" -- $WEB_PATH
