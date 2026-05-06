@@ -308,7 +308,7 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
         "realitySettings": {
           "show": false,
           "xver": 2,
-          "target": "wwww.google.com:443",
+          "target": "www.google.com:443",
           "limitFallbackUpload": {
             "afterBytes": 0,
             "bytesPerSec": 65536,
