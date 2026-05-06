@@ -113,11 +113,12 @@ fi
 
 mkdir -p /var/lib/xray/cert/
 
+set +e
 ### Проверить
-#cp /etc/letsencrypt/live/$DOMAIN/fullchain.pem /var/lib/xray/cert/fullchain.pem
-#cp /etc/letsencrypt/live/$DOMAIN/privkey.pem /var/lib/xray/cert/privkey.pem
-#chmod 744 /var/lib/xray/cert/privkey.pem
-#chmod 744 /var/lib/xray/cert/fullchain.pem
+cp /etc/letsencrypt/live/$DOMAIN/fullchain.pem /var/lib/xray/cert/fullchain.pem
+cp /etc/letsencrypt/live/$DOMAIN/privkey.pem /var/lib/xray/cert/privkey.pem
+chmod 744 /var/lib/xray/cert/privkey.pem
+chmod 744 /var/lib/xray/cert/fullchain.pem
 
 set +e
 certbot certonly --webroot -w /var/www/html \
