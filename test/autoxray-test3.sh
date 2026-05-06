@@ -310,14 +310,14 @@ cat << 'EOF' | envsubst > "$SCRIPT_DIR/config.json"
           "xver": 2,
           "target": "127.0.0.1:500",
           "limitFallbackUpload": {
-            "afterBytes": 0,
-            "bytesPerSec": 65536,
-            "burstBytesPerSec": 0
-          },
+		    "afterBytes": 0,
+			"bytesPerSec": 65536,
+			"burstBytesPerSec": 0
+		  },
           "limitFallbackDownload": {
-            "afterBytes": 0,
-            "bytesPerSec": 65536,
-            "burstBytesPerSec": 0
+		    "afterBytes": 0,
+			"bytesPerSec": 65536,
+			"burstBytesPerSec": 0
           },
           "spiderX": "/",
           "shortIds": [
